@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
+#include "Online/CoreOnline.h"
 #include "EOS_GameInstance.generated.h"
 
 
@@ -20,6 +21,6 @@ class ALERTBALL_API UEOS_GameInstance : public UGameInstance
 	UFUNCTION(BlueprintCallable, Category = "EOS Functions")
 	void LoginWIthEOS(FString ID, FString Token, FString LoginType);
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable, Category = "EOS Funcions")
 	void LoginWIthEOS_Return(int32 LocalUserNum, bool bWasSuccess, const FUniqueNetId& UserId, const FString& Error);
 };

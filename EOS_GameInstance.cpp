@@ -4,7 +4,7 @@
 #include "EOS_GameInstance.h"
 #include "OnlineSubsystemUtils.h"
 #include "OnlineSubsystem.h"
-#include "UObject/CoreOnline.h"
+#include "Online/CoreOnline.h"
 #include "Interfaces/OnlineIdentityInterface.h"
 
 
@@ -12,11 +12,11 @@ void UEOS_GameInstance::LoginWIthEOS(FString ID, FString Token, FString LoginTyp
 	//Setting up online subsystem
 	IOnlineSubsystem *SubsystemRef = Online::GetSubsystem(this->GetWorld());
 	if (SubsystemRef == nullptr) {
-		UE_LOG(LOG_CATEGORY, Error, TEXT("Null found at subsystemref"));
+		UE_LOG(LogTemp, Error, TEXT("Null found at subsystemref"));
 		return;
 	}
 	IOnlineIdentityPtr IdentityPointerRef = SubsystemRef->GetIdentityInterface();
-	if (IOnlineIdentityPtr != nullptr) {
+	if (IdentityPointerRef != nullptr) {
 		FOnlineAccountCredentials AccountDetails;
 		AccountDetails.Id = ID;
 		AccountDetails.Token = Token;

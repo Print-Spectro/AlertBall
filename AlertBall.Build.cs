@@ -8,7 +8,7 @@ public class AlertBall : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "OnlineSubsystemEOS", "OnlineSubsystem", "OnlineSubsystemUtils", "CoreOnline" });
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "OnlineSubsystemEOS", "OnlineSubsystem", "OnlineSubsystemUtils", "CoreOnline"});
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 
