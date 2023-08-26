@@ -95,7 +95,7 @@ void UEOS_GameInstance::createEOSSession(bool bIsDedicatedServer, bool bIsLanSer
 	SessionCreationInfo.bAllowInvites = true;
 	SessionCreationInfo.bIsLANMatch = bIsLanServer;
 	SessionCreationInfo.NumPublicConnections = NumberOfPublicConnections;
-	SessionCreationInfo.bUseLobbiesIfAvailable = false; //dedicated server doesn't support lobbies, use sessions / matchmaking 
+	SessionCreationInfo.bUseLobbiesIfAvailable = true; //dedicated server doesn't support lobbies, use sessions / matchmaking 
 	SessionCreationInfo.bUsesPresence = false;
 	SessionCreationInfo.bShouldAdvertise = true;
 	SessionCreationInfo.Set(SEARCH_KEYWORDS, FString("AngeloSearchSettingsMessage"), EOnlineDataAdvertisementType::ViaOnlineService);
@@ -114,6 +114,8 @@ void UEOS_GameInstance::onCreateSessionCompleted(FName SessionName, bool bWasSuc
 
 }
 
+
+
 void UEOS_GameInstance::findSesionAndJoin()
 {
 }
@@ -126,6 +128,31 @@ void UEOS_GameInstance::joinSession()
 {
 }
 
+
 void UEOS_GameInstance::OnJoinSessionCompleted(FName SessionName, EOnJoinSessionCompleteResult::Type Result)
 {
+}
+
+void UEOS_GameInstance::destroySession()
+{
+	IOnlineSubsystem* SubsystemRef = Online::GetSubsystem(this->GetWorld());
+	if (SubsystemRef == nullptr) {
+		UE_LOG(LogTemp, Error, TEXT("Null found at subsystemref"));
+		return;
+	}
+	IOnlineSessionPtr SessionPtrRef = SubsystemRef->GetSessionInterface();
+	if (SessionPtrRef == nullptr) {
+		UE_LOG(LogTemp, Error, TEXT("Null found at sessionptref"));
+		return;
+	}
+	SessionPtrRef->OnDestroySessionCompleteDelegates.AddUObject(this, &UEOS_GameInstance::onDestroySessionCompleted);
+	SessionPtrRef->DestroySession(FName("MainSession"));
+
+}
+
+void UEOS_GameInstance::onDestroySessionCompleted(FName SessionName, bool bWasSuccesful)
+{
+	if (bWasSuccesful) {
+		UE_LOG(LogTemp, Verbose, TEXT("SessionDestroyed"));
+	}
 }

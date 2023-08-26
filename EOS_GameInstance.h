@@ -38,13 +38,18 @@ public:
 	UFUNCTION(BlueprintCallable, Category="EOS Functions")
 	void joinSession();
 
+	UFUNCTION(BlueprintCallable, Category="EOS Functions")
+	void destroySession();
+
 	//TSharedRef<FOnlineSessionSearch> SessionSearch;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "EOS Variables")
 	FString OpenLevelText = FString("/Game/Levels/MainSessionMap");
 
 	void onCreateSessionCompleted(FName SessionName, bool bWasSuccesful);
+	void onDestroySessionCompleted(FName SessionName, bool bWasSuccesful);
 	void LoginWIthEOS_Return(int32 LocalUserNum, bool bWasSuccess, const FUniqueNetId& UserId, const FString& Error);
 	void onFindSessionCompleted(bool bWasSuccess);
 	void OnJoinSessionCompleted(FName SessionName, EOnJoinSessionCompleteResult::Type Result); //Include OnlineSessionInterface
+		
 };
