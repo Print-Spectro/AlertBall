@@ -86,7 +86,7 @@ void UEOS_GameInstance::createEOSSession(bool bIsDedicatedServer, bool bIsLanSer
 		return;
 	}
 	IOnlineSessionPtr SessionPtrRef = SubsystemRef->GetSessionInterface();
-	if (SubsystemRef == nullptr) {
+	if (SessionPtrRef == nullptr) {
 		UE_LOG(LogTemp, Error, TEXT("Null found at subsystemref"));
 		return;
 	}
@@ -116,21 +116,80 @@ void UEOS_GameInstance::onCreateSessionCompleted(FName SessionName, bool bWasSuc
 
 
 
-void UEOS_GameInstance::findSesionAndJoin()
+void UEOS_GameInstance::findSessionAndJoin()
 {
+	IOnlineSubsystem* SubsystemRef = Online::GetSubsystem(this->GetWorld());
+	if (SubsystemRef == nullptr) {
+		UE_LOG(LogTemp, Error, TEXT("Null found at subsystemref"));
+		return;
+	}
+	IOnlineSessionPtr SessionPtrRef = SubsystemRef->GetSessionInterface();
+	if (SessionPtrRef) 
+	{
+		SessionSearch = MakeShareable(new FOnlineSessionSearch());
+		SessionSearch->QuerySettings.Set(SEARCH_LOBBIES, true, EOnlineComparisonOp::Equals); //set false for normal matchmaking sessions
+		SessionSearch->MaxSearchResults = 20;
+		SessionPtrRef->OnFindSessionsCompleteDelegates.AddUObject(this, &UEOS_GameInstance::onFindSessionCompleted);
+		SessionPtrRef->FindSessions(0, SessionSearch.ToSharedRef());
+	}
+
 }
 
 void UEOS_GameInstance::onFindSessionCompleted(bool bWasSuccess)
 {
+	if (bWasSuccess) {
+		IOnlineSubsystem* SubsystemRef = Online::GetSubsystem(this->GetWorld());
+		if (SubsystemRef == nullptr) {
+			UE_LOG(LogTemp, Error, TEXT("Null found at subsystemref"));
+			return;
+		}
+		IOnlineSessionPtr SessionPtrRef = SubsystemRef->GetSessionInterface();
+		if (SessionPtrRef) 
+		{	
+			if (SessionSearch->SearchResults.Num() > 0) {
+
+				SessionPtrRef->OnJoinSessionCompleteDelegates.AddUObject(this, &UEOS_GameInstance::onJoinSessionCompleted);
+				SessionPtrRef->JoinSession(0, FName("MainSession"), SessionSearch->SearchResults[0]);
+			}
+			else {
+				createEOSSession(false, false, 10);
+			}
+		}
+	}
+	else {
+		createEOSSession(false, false, 10); //create a session if you couldn't find a session (not sure if I want to keep this)
+	}
 }
 
 void UEOS_GameInstance::joinSession()
 {
+
 }
 
 
-void UEOS_GameInstance::OnJoinSessionCompleted(FName SessionName, EOnJoinSessionCompleteResult::Type Result)
+void UEOS_GameInstance::onJoinSessionCompleted(FName SessionName, EOnJoinSessionCompleteResult::Type Result)
 {
+	if (Result == EOnJoinSessionCompleteResult::Success) 
+	{
+		if (APlayerController* PlayerControllerRef = UGameplayStatics::GetPlayerController(GetWorld(), 0)) 
+		{
+			FString JoinAddress;
+			IOnlineSubsystem* SubsystemRef = Online::GetSubsystem(this->GetWorld());
+			if (SubsystemRef == nullptr) {
+				UE_LOG(LogTemp, Error, TEXT("Null found at subsystemref"));
+				return;
+			}
+			IOnlineSessionPtr SessionPtrRef = SubsystemRef->GetSessionInterface();
+			if (SessionPtrRef) 
+			{
+				SessionPtrRef->GetResolvedConnectString(FName("MainSession"), JoinAddress);
+				UE_LOG(LogTemp, Warning, TEXT("JoinAddress is %s"), *JoinAddress);
+				if (!JoinAddress.IsEmpty()) {
+					PlayerControllerRef->ClientTravel(JoinAddress, ETravelType::TRAVEL_Absolute);
+				}
+			}
+		}
+	}
 }
 
 void UEOS_GameInstance::destroySession()
