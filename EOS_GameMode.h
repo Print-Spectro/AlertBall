@@ -14,7 +14,6 @@ class ALERTBALL_API AEOS_GameMode : public AGameModeBase
 {
 	GENERATED_BODY()
 
-	AEOS_GameMode();
 
 public:	
 	virtual void PostLogin(APlayerController* NewPlayer) override;
