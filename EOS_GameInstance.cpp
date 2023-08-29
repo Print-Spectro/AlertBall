@@ -115,7 +115,7 @@ void UEOS_GameInstance::onCreateSessionCompleted(FName SessionName, bool bWasSuc
 	}
 	UE_LOG(LogTemp, Warning, TEXT("SessionCreated"));
 	GetWorld()->ServerTravel(OpenLevelText);
-
+	//UGameplayStatics::OpenLevelBySoftObjectPtr(GetWorld(), LevelToOpen);
 }
 
 
@@ -159,6 +159,7 @@ void UEOS_GameInstance::onFindSessionCompleted(bool bWasSuccess)
 // 					if (i.)
 // 				}
 				SessionPtrRef->JoinSession(0, MySessionName, SessionSearch->SearchResults[0]);
+				UE_LOG(LogTemp, Warning, TEXT("Joined Session %s"), *SessionSearch->SearchResults[0].Session.SessionInfo->ToString());
 			}
 			else {
 				//createEOSSession(false, false, 10);
@@ -188,9 +189,10 @@ void UEOS_GameInstance::onJoinSessionCompleted(FName SessionName, EOnJoinSession
 			IOnlineSessionPtr SessionPtrRef = SubsystemRef->GetSessionInterface();
 			if (SessionPtrRef) 
 			{
-				SessionPtrRef->GetResolvedConnectString(SessionName, JoinAddress);
+				SessionPtrRef->GetResolvedConnectString(MySessionName, JoinAddress);
 				UE_LOG(LogTemp, Warning, TEXT("JoinAddress is %s"), *JoinAddress);
 				if (!JoinAddress.IsEmpty()) {
+					UE_LOG(LogTemp, Warning, TEXT("ClientTravel"));
 					PlayerControllerRef->ClientTravel(JoinAddress, ETravelType::TRAVEL_Absolute);
 				}
 				else {

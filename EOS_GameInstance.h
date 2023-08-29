@@ -44,6 +44,9 @@ public:
 	FString OpenLevelText = FString("/Game/Levels/MainSessionMap");
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "EOS Variables")
+	TSoftObjectPtr<UWorld> LevelToOpen;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "EOS Variables")
 	FName MySessionName = FName("MainSession");
 
 	void onCreateSessionCompleted(FName SessionName, bool bWasSuccesful);
