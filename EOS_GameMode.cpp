@@ -35,7 +35,11 @@ void AEOS_GameMode::PostLogin(APlayerController* NewPlayer)
 		}
 
 		TSharedPtr<const FUniqueNetId> UniqueNetId = UniqueNetIDRepl.GetUniqueNetId();
-		check(UniqueNetId != nullptr);
+
+		if (UniqueNetId == nullptr) {
+			return;
+		}
+
 		IOnlineSubsystem *SubsystemRef = Online::GetSubsystem(NewPlayer->GetWorld());
 		IOnlineSessionPtr SessionRef = SubsystemRef->GetSessionInterface();
 		bool bRegistrationSuccess = SessionRef->RegisterPlayer(FName("MainSession"), *UniqueNetId, false);

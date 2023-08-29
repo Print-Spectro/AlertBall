@@ -91,16 +91,20 @@ void UEOS_GameInstance::createEOSSession(bool bIsDedicatedServer, bool bIsLanSer
 		return;
 	}
 	FOnlineSessionSettings SessionCreationInfo;
-	SessionCreationInfo.bIsDedicated = bIsDedicatedServer;
+	SessionCreationInfo.bIsDedicated = false;
 	SessionCreationInfo.bAllowInvites = true;
-	SessionCreationInfo.bIsLANMatch = bIsLanServer;
+	SessionCreationInfo.bIsLANMatch = false;
 	SessionCreationInfo.NumPublicConnections = NumberOfPublicConnections;
 	SessionCreationInfo.bUseLobbiesIfAvailable = true; //dedicated server doesn't support lobbies, use sessions / matchmaking 
-	SessionCreationInfo.bUsesPresence = false;
+	SessionCreationInfo.bUsesPresence = true;
 	SessionCreationInfo.bShouldAdvertise = true;
-	SessionCreationInfo.Set(SEARCH_KEYWORDS, FString("AngeloSearchSettingsMessage"), EOnlineDataAdvertisementType::ViaOnlineService);
+	SessionCreationInfo.bShouldAdvertise = true;
+	SessionCreationInfo.bAllowJoinInProgress = true;
+	SessionCreationInfo.bAllowJoinViaPresence = true;
+
+	SessionCreationInfo.Set(SEARCH_KEYWORDS, FString("AlertBallLobby"), EOnlineDataAdvertisementType::ViaOnlineService);
 	SessionPtrRef->OnCreateSessionCompleteDelegates.AddUObject(this, &UEOS_GameInstance::onCreateSessionCompleted);
-	SessionPtrRef->CreateSession(0, FName("MainSession"), SessionCreationInfo);
+	SessionPtrRef->CreateSession(0, MySessionName, SessionCreationInfo);
 }
 
 void UEOS_GameInstance::onCreateSessionCompleted(FName SessionName, bool bWasSuccesful)
@@ -115,10 +119,9 @@ void UEOS_GameInstance::onCreateSessionCompleted(FName SessionName, bool bWasSuc
 }
 
 
-
 void UEOS_GameInstance::findSessionAndJoin()
 {
-	IOnlineSubsystem* SubsystemRef = Online::GetSubsystem(this->GetWorld());
+	IOnlineSubsystem *SubsystemRef = Online::GetSubsystem(this->GetWorld());
 	if (SubsystemRef == nullptr) {
 		UE_LOG(LogTemp, Error, TEXT("Null found at subsystemref"));
 		return;
@@ -127,8 +130,11 @@ void UEOS_GameInstance::findSessionAndJoin()
 	if (SessionPtrRef) 
 	{
 		SessionSearch = MakeShareable(new FOnlineSessionSearch());
-		SessionSearch->QuerySettings.Set(SEARCH_LOBBIES, true, EOnlineComparisonOp::Equals); //set false for normal matchmaking sessions
+		SessionSearch->QuerySettings.Set(SEARCH_KEYWORDS, FString("AlertBallLobby"), EOnlineComparisonOp::Equals);
+		SessionSearch->QuerySettings.Set(SEARCH_LOBBIES, true, EOnlineComparisonOp::Equals);
+		SessionSearch->bIsLanQuery = false;
 		SessionSearch->MaxSearchResults = 20;
+		//SessionSearch->QuerySettings.SearchParams.Empty();
 		SessionPtrRef->OnFindSessionsCompleteDelegates.AddUObject(this, &UEOS_GameInstance::onFindSessionCompleted);
 		SessionPtrRef->FindSessions(0, SessionSearch.ToSharedRef());
 	}
@@ -149,21 +155,21 @@ void UEOS_GameInstance::onFindSessionCompleted(bool bWasSuccess)
 			if (SessionSearch->SearchResults.Num() > 0) {
 
 				SessionPtrRef->OnJoinSessionCompleteDelegates.AddUObject(this, &UEOS_GameInstance::onJoinSessionCompleted);
-				SessionPtrRef->JoinSession(0, FName("MainSession"), SessionSearch->SearchResults[0]);
+// 				for (FOnlineSessionSearchResult i : SessionSearch->SearchResults) {
+// 					if (i.)
+// 				}
+				SessionPtrRef->JoinSession(0, MySessionName, SessionSearch->SearchResults[0]);
 			}
 			else {
-				createEOSSession(false, false, 10);
+				//createEOSSession(false, false, 10);
+				UE_LOG(LogTemp, Error, TEXT("No Sessions found, creating session"));
 			}
 		}
 	}
 	else {
-		createEOSSession(false, false, 10); //create a session if you couldn't find a session (not sure if I want to keep this)
+		//createEOSSession(false, false, 10); //create a session if you couldn't find a session (not sure if I want to keep this)
+		UE_LOG(LogTemp, Error, TEXT("Find session unsuccessful"));
 	}
-}
-
-void UEOS_GameInstance::joinSession()
-{
-
 }
 
 
@@ -182,10 +188,13 @@ void UEOS_GameInstance::onJoinSessionCompleted(FName SessionName, EOnJoinSession
 			IOnlineSessionPtr SessionPtrRef = SubsystemRef->GetSessionInterface();
 			if (SessionPtrRef) 
 			{
-				SessionPtrRef->GetResolvedConnectString(FName("MainSession"), JoinAddress);
+				SessionPtrRef->GetResolvedConnectString(SessionName, JoinAddress);
 				UE_LOG(LogTemp, Warning, TEXT("JoinAddress is %s"), *JoinAddress);
 				if (!JoinAddress.IsEmpty()) {
 					PlayerControllerRef->ClientTravel(JoinAddress, ETravelType::TRAVEL_Absolute);
+				}
+				else {
+					UE_LOG(LogTemp, Error, TEXT("No Join Address"));
 				}
 			}
 		}
@@ -205,7 +214,7 @@ void UEOS_GameInstance::destroySession()
 		return;
 	}
 	SessionPtrRef->OnDestroySessionCompleteDelegates.AddUObject(this, &UEOS_GameInstance::onDestroySessionCompleted);
-	SessionPtrRef->DestroySession(FName("MainSession"));
+	SessionPtrRef->DestroySession(MySessionName);
 
 }
 

@@ -36,15 +36,15 @@ public:
 	void findSessionAndJoin();
 
 	UFUNCTION(BlueprintCallable, Category="EOS Functions")
-	void joinSession();
-
-	UFUNCTION(BlueprintCallable, Category="EOS Functions")
 	void destroySession();
 
 	TSharedPtr<FOnlineSessionSearch> SessionSearch;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "EOS Variables")
 	FString OpenLevelText = FString("/Game/Levels/MainSessionMap");
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "EOS Variables")
+	FName MySessionName = FName("MainSession");
 
 	void onCreateSessionCompleted(FName SessionName, bool bWasSuccesful);
 	void onDestroySessionCompleted(FName SessionName, bool bWasSuccesful);
