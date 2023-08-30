@@ -95,9 +95,8 @@ void UEOS_GameInstance::createEOSSession(bool bIsDedicatedServer, bool bIsLanSer
 	SessionCreationInfo.bAllowInvites = true;
 	SessionCreationInfo.bIsLANMatch = false;
 	SessionCreationInfo.NumPublicConnections = NumberOfPublicConnections;
-	SessionCreationInfo.bUseLobbiesIfAvailable = true; //dedicated server doesn't support lobbies, use sessions / matchmaking 
+	SessionCreationInfo.bUseLobbiesIfAvailable = false; //dedicated server doesn't support lobbies, use sessions / matchmaking 
 	SessionCreationInfo.bUsesPresence = true;
-	SessionCreationInfo.bShouldAdvertise = true;
 	SessionCreationInfo.bShouldAdvertise = true;
 	SessionCreationInfo.bAllowJoinInProgress = true;
 	SessionCreationInfo.bAllowJoinViaPresence = true;
@@ -131,7 +130,7 @@ void UEOS_GameInstance::findSessionAndJoin()
 	{
 		SessionSearch = MakeShareable(new FOnlineSessionSearch());
 		SessionSearch->QuerySettings.Set(SEARCH_KEYWORDS, FString("AlertBallLobby"), EOnlineComparisonOp::Equals);
-		SessionSearch->QuerySettings.Set(SEARCH_LOBBIES, true, EOnlineComparisonOp::Equals);
+		//SessionSearch->QuerySettings.Set(SEARCH_LOBBIES, true, EOnlineComparisonOp::Equals);
 		SessionSearch->bIsLanQuery = false;
 		SessionSearch->MaxSearchResults = 20;
 		//SessionSearch->QuerySettings.SearchParams.Empty();

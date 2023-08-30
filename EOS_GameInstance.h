@@ -41,7 +41,7 @@ public:
 	TSharedPtr<FOnlineSessionSearch> SessionSearch;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "EOS Variables")
-	FString OpenLevelText = FString("/Game/Levels/MainSessionMap");
+	FString OpenLevelText = FString("/Game/Levels/MainSessionMap?listen");
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "EOS Variables")
 	TSoftObjectPtr<UWorld> LevelToOpen;
