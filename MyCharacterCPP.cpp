@@ -15,6 +15,9 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 
+//Character Movement
+#include "GameFramework/CharacterMovementComponent.h"
+
 
 // Sets default values
 AMyCharacterCPP::AMyCharacterCPP()
@@ -22,16 +25,18 @@ AMyCharacterCPP::AMyCharacterCPP()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 
-	Mesh = CreateDefaultSubobject<UStaticMeshComponent>("BaseMesh");
-	RootComponent = Mesh;
+	//Mesh = CreateDefaultSubobject<UStaticMeshComponent>("BaseMesh");
+	//RootComponent = Mesh;
 
 	SpringArmComp = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));//Creating spring arm
-	SpringArmComp->SetupAttachment(Mesh);//Setting up attachment to the mesh
+	SpringArmComp->SetupAttachment(GetMesh());//Setting up attachment to the mesh
 
 
 	ThirdPersonCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("ThirdPersonCamera"));
 	ThirdPersonCamera->SetupAttachment(SpringArmComp);
 	//Allows orbital looking around
+
+	//CharacterMovement = CreateDefaultSubobject<UCharacterMovementComponent>(TEXT("CharacterMovementComponent"));
 	
 }
 
@@ -47,6 +52,13 @@ void AMyCharacterCPP::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+
+	if (ShouldMove) {
+		//FStepDownResult* StepDownResult;
+		//CharacterMovement->MoveAlongFloor(MoveDirection * MoveSpeed, DeltaTime, StepDownResult);
+		//SetActorRelativeLocation(MoveDirection*MoveSpeed*DeltaTime);
+	}
+	
 }
 
 // Called to bind functionality to input
@@ -66,15 +78,17 @@ void AMyCharacterCPP::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 	UEnhancedInputComponent* PEI = Cast<UEnhancedInputComponent>(PlayerInputComponent);
 	//Binding the actions
 	PEI->BindAction(InputActions->InputMove, ETriggerEvent::Triggered, this, &AMyCharacterCPP::Move);
+	//PEI->BindAction(InputActions->InputMove, ETriggerEvent::Completed, this, &AMyCharacterCPP::stopMove);
 	PEI->BindAction(InputActions->InputLook, ETriggerEvent::Triggered, this, &AMyCharacterCPP::Look);
-	//PEI->BindAction(InputActions->InputJump, ETriggerEvent::Triggered, this, &ACharacter::Jump);
-	//PEI->BindAction(InputActions->InputJump, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
+	PEI->BindAction(InputActions->InputJump, ETriggerEvent::Triggered, this, &ACharacter::Jump);
+	PEI->BindAction(InputActions->InputJump, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
 	
 }	
 
 void AMyCharacterCPP::Move(const FInputActionValue& Value) 
 {	
-	UE_LOG(LogTemp, Display, TEXT("MoveTriggered"));
+	//UE_LOG(LogTemp, Display, TEXT("MoveTriggered"));
+	ShouldMove = true;
 	if (Controller != nullptr)
 	{
 		const FVector2D MoveValue = Value.Get<FVector2D>();
@@ -86,6 +100,7 @@ void AMyCharacterCPP::Move(const FInputActionValue& Value)
 			const FVector Direction = MovementRotation.RotateVector(FVector::ForwardVector);
 
 			AddMovementInput(Direction, MoveValue.Y);
+			//MoveDirection = MoveValue.Y * Direction;
 		}
 
 		//Right.Feft direction
@@ -94,13 +109,19 @@ void AMyCharacterCPP::Move(const FInputActionValue& Value)
 			//Get right vector
 			const FVector Direction = MovementRotation.RotateVector(FVector::RightVector);
 
+			//MoveDirection = MoveValue.X * Direction;
 			AddMovementInput(Direction, MoveValue.X);
 
+			
 			//SetActorRotation(MovementRotation + FRotator(0,0, 0));
 			
 		}
 		
 	}
+}
+void AMyCharacterCPP::stopMove(const FInputActionValue& Value)
+{
+	ShouldMove = false;
 }
 
 void AMyCharacterCPP::Look(const FInputActionValue& Value) 
@@ -113,4 +134,6 @@ void AMyCharacterCPP::Look(const FInputActionValue& Value)
 		AddControllerPitchInput(LookValue.Y);
 	}
 }
+
+
 

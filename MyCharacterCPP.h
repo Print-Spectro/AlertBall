@@ -16,7 +16,7 @@ Custom class that handles movement and interaction
 */
 
 UCLASS()
-class ALERTBALL_API AMyCharacterCPP : public APawn
+class ALERTBALL_API AMyCharacterCPP : public ACharacter
 {
 	GENERATED_BODY()
 
@@ -28,8 +28,8 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	UPROPERTY(EditDefaultsOnly)
-	UStaticMeshComponent* Mesh;
+// 	UPROPERTY(EditDefaultsOnly)
+// 	UStaticMeshComponent* Mesh;
 
 	UPROPERTY(EditDefaultsOnly)
 	class USpringArmComponent* SpringArmComp;
@@ -53,7 +53,6 @@ public:
 	float CurveValue;
 
 
-
 #pragma region /** Input */
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "EnhancedInput")
@@ -62,17 +61,29 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Enhanced Input")
 	class UMyInputConfigData* InputActions;
 
+// 	UPROPERTY(EditDefaultsOnly)
+// 	class UCharacterMovementComponent* CharacterMovement;
+
 	//Handle move input
 	void Move(const FInputActionValue& Value);
 
 	//Handle Look input 
 	void Look(const FInputActionValue& Value);
 
+	//Stop moving when move input released
+	void stopMove(const FInputActionValue& Value);
+
 	
 	//Handle Jump input 
 	//void Jump(const FInputActionValue& Value);
-private:
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Meshes", meta = (AllowPrivateAccess = "true"))
-	class USphereComponent* CollisionSphere;
+	
+	UPROPERTY(EditDefaultsOnly)
+	float MoveSpeed = 100;
+
+	UPROPERTY()
+	bool ShouldMove = false;
+	
+	UPROPERTY()
+	FVector MoveDirection;
 };
 
