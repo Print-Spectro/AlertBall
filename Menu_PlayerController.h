@@ -11,6 +11,8 @@
  */
 
  class UUserWidget;
+ class UWidgetSwitcher;
+ class UMyMainMenuWidgetSwitch;
 
 UCLASS()
 class ALERTBALL_API AMenu_PlayerController : public APlayerController
@@ -20,11 +22,21 @@ class ALERTBALL_API AMenu_PlayerController : public APlayerController
 	virtual void BeginPlay() override;
 
 
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, category = "Menu Widget")
 	TSubclassOf<UUserWidget> MainMenuAsset;
 
+
+public:
+
+	UFUNCTION()
+	void SwitchMenu(float MenuIndex);
+
+
 	UPROPERTY()
-	UUserWidget* MainMenuInst;
+	UMyMainMenuWidgetSwitch* MenuSwitchInst;
+
+	UPROPERTY()
+	UWidgetSwitcher* WidgetSwitcherInst;
 	
 
 };
