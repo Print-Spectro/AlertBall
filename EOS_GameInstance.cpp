@@ -9,6 +9,14 @@
 #include "Kismet/GameplayStatics.h"
 
 
+void UEOS_GameInstance::StartGameInstance()
+{
+	Super::StartGameInstance();
+
+
+
+}
+
 void UEOS_GameInstance::LoginWIthEOS(FString ID, FString Token, FString LoginType) {
 	//Setting up online subsystem
 	IOnlineSubsystem *SubsystemRef = Online::GetSubsystem(this->GetWorld());
@@ -138,6 +146,11 @@ void UEOS_GameInstance::findSessionAndJoin()
 		SessionPtrRef->FindSessions(0, SessionSearch.ToSharedRef());
 	}
 
+}
+
+void UEOS_GameInstance::joinSesssion()
+{
+	
 }
 
 void UEOS_GameInstance::onFindSessionCompleted(bool bWasSuccess)

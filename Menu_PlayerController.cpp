@@ -2,8 +2,12 @@
 
 
 #include "Menu_PlayerController.h"
+//widgets
 #include "Blueprint/UserWidget.h"
 #include "Blueprint/WidgetBlueprintLibrary.h"
+//widget switcher
+#include "Components/WidgetSwitcher.h"
+#include "MenuWidgets/MyMainMenuWidgetSwitch.h"
 
 void AMenu_PlayerController::BeginPlay()
 {
@@ -11,13 +15,34 @@ void AMenu_PlayerController::BeginPlay()
 
 
 	if (MainMenuAsset != nullptr) {
-		MainMenuInst = CreateWidget<UUserWidget>(GetWorld(), MainMenuAsset);
-		MainMenuInst->AddToViewport();
+		MenuSwitchInst = CreateWidget<UMyMainMenuWidgetSwitch>(GetWorld(), MainMenuAsset);
+
+		MenuSwitchInst->AddToViewport();
 
 		UWidgetBlueprintLibrary::SetInputMode_UIOnlyEx(this);
 		bShowMouseCursor = true;
+
+		WidgetSwitcherInst = MenuSwitchInst->WidgetSwitcher;
+
 	}
 	else {
-		UE_LOG(LogTemp, Warning, TEXT("No Menu Asset Selected"));
+		UE_LOG(LogTemp, Warning, TEXT("No Menu Switcher Widget Selected"));
 	}
 }
+
+void AMenu_PlayerController::SwitchMenu(float MenuIndex)
+{
+	if (WidgetSwitcherInst == nullptr) {
+		UE_LOG(LogTemp, Warning, TEXT("AMenu_PlayerController::SwitchMenu: WidgetSwitcher is null"))
+		return;
+	}
+	if (WidgetSwitcherInst->GetNumWidgets() - 1 < MenuIndex) {
+		UE_LOG(LogTemp, Warning, TEXT("AMenu_PlayerController::SwitchMenu: Index greater than number of widgets"))
+		return;
+	}
+	WidgetSwitcherInst->SetActiveWidgetIndex(MenuIndex);
+}
+
+
+
+
