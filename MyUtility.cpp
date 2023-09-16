@@ -2,7 +2,7 @@
 
 
 #include "MyUtility.h"
-
+#include "EOS_GameInstance.h"
 #include "Menu_PlayerController.h"
 
 APlayerController* UMyUtility::GetFirstPlayerController(UObject* Object)
@@ -27,4 +27,25 @@ AMenu_PlayerController* UMyUtility::GetMenuPlayerController(UObject* Object) {
 		return nullptr;
 	}
 	return PlayerController;
+}
+
+UEOS_GameInstance* UMyUtility::GetGameInstance(UObject* Object)
+{
+	UWorld* World = Object->GetWorld();
+	if (World == nullptr) {
+		UE_LOG(LogTemp, Error, TEXT("UMyUtility::GetGameInstance: No world found"));
+		return nullptr;
+	}
+	UGameInstance* GameInstance = World->GetGameInstance();
+	if (GameInstance == nullptr) {
+		UE_LOG(LogTemp, Error, TEXT("UMyUtility::GetGameInstance: No Game Instance found"));
+		return nullptr;
+	}
+	UEOS_GameInstance* EOSGameInstance = Cast<UEOS_GameInstance>(GameInstance);
+	if (EOSGameInstance == nullptr) {
+		UE_LOG(LogTemp, Error, TEXT("UMyUtility::GetGameInstance: Cast to EOS_GameInstance fail"));
+		return nullptr;
+	}
+
+	return EOSGameInstance;
 }

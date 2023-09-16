@@ -12,12 +12,12 @@
 void UEOS_GameInstance::StartGameInstance()
 {
 	Super::StartGameInstance();
-
+	
 
 
 }
 
-void UEOS_GameInstance::LoginWIthEOS(FString ID, FString Token, FString LoginType) {
+void UEOS_GameInstance::loginWithEOS(FString ID, FString Token, FString LoginType) {
 	//Setting up online subsystem
 	IOnlineSubsystem *SubsystemRef = Online::GetSubsystem(this->GetWorld());
 	if (SubsystemRef == nullptr) {
@@ -148,9 +148,30 @@ void UEOS_GameInstance::findSessionAndJoin()
 
 }
 
-void UEOS_GameInstance::joinSesssion()
+void UEOS_GameInstance::joinSession(int32 Index)
 {
-	
+	IOnlineSubsystem* SubsystemRef = Online::GetSubsystem(this->GetWorld());
+	if (SubsystemRef == nullptr) {
+		UE_LOG(LogTemp, Error, TEXT("Null found at subsystemref"));
+		return;
+	}
+	IOnlineSessionPtr SessionPtrRef = SubsystemRef->GetSessionInterface();
+	if (SessionPtrRef)
+	{
+		if (SessionSearch->SearchResults.Num() > 0) {
+
+			SessionPtrRef->OnJoinSessionCompleteDelegates.AddUObject(this, &UEOS_GameInstance::onJoinSessionCompleted);
+			// 				for (FOnlineSessionSearchResult i : SessionSearch->SearchResults) {
+			// 					if (i.)
+			// 				}
+			SessionPtrRef->JoinSession(0, MySessionName, SessionSearch->SearchResults[Index]);
+			UE_LOG(LogTemp, Warning, TEXT("Joined Session %s"), *SessionSearch->SearchResults[Index].Session.SessionInfo->ToString());
+		}
+		else {
+			//createEOSSession(false, false, 10);
+			UE_LOG(LogTemp, Error, TEXT("No Sessions found"));
+		}
+	}
 }
 
 void UEOS_GameInstance::onFindSessionCompleted(bool bWasSuccess)
@@ -175,7 +196,7 @@ void UEOS_GameInstance::onFindSessionCompleted(bool bWasSuccess)
 			}
 			else {
 				//createEOSSession(false, false, 10);
-				UE_LOG(LogTemp, Error, TEXT("No Sessions found, creating session"));
+				UE_LOG(LogTemp, Error, TEXT("No Sessions found"));
 			}
 		}
 	}

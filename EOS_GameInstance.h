@@ -23,7 +23,7 @@ class ALERTBALL_API UEOS_GameInstance : public UGameInstance
 
 public:
 	UFUNCTION(BlueprintCallable, Category = "EOS Functions")
-	void LoginWIthEOS(FString ID, FString Token, FString LoginType);
+	void loginWithEOS(FString ID, FString Token, FString LoginType);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure,  Category = "EOS Functions")
 	FString getPlayerUsername();
@@ -38,7 +38,7 @@ public:
 	void findSessionAndJoin();
 
 	UFUNCTION(BlueprintCallable, Category = "EOS Functions")
-	void joinSesssion();
+	void joinSession(int32 Index);
 
 	UFUNCTION(BlueprintCallable, Category="EOS Functions")
 	void destroySession();
