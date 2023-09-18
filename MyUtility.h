@@ -11,6 +11,7 @@
  */
  class AMenu_PlayerController;
  class UEOS_GameInstance;
+ class UMyBrowserWidget;
 
 UCLASS()
 class ALERTBALL_API UMyUtility : public UObject
@@ -22,5 +23,5 @@ public:
 	static APlayerController* GetFirstPlayerController(UObject* Object);
 	static AMenu_PlayerController* GetMenuPlayerController(UObject* Object);
 	static UEOS_GameInstance* GetGameInstance(UObject* Object);
-
+	static UMyBrowserWidget* GetBrowserWidget(UObject* Object);
 };

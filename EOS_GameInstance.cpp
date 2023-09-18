@@ -8,12 +8,15 @@
 #include "Online/CoreOnline.h"
 #include "Kismet/GameplayStatics.h"
 
+//Getter utility
+#include "MyUtility.h"
+
+//ServerBrowser to populate
+#include "MenuWidgets/MyBrowserWidget.h"
 
 void UEOS_GameInstance::StartGameInstance()
 {
 	Super::StartGameInstance();
-	
-
 
 }
 
@@ -177,28 +180,8 @@ void UEOS_GameInstance::joinSession(int32 Index)
 void UEOS_GameInstance::onFindSessionCompleted(bool bWasSuccess)
 {
 	if (bWasSuccess) {
-		IOnlineSubsystem* SubsystemRef = Online::GetSubsystem(this->GetWorld());
-		if (SubsystemRef == nullptr) {
-			UE_LOG(LogTemp, Error, TEXT("Null found at subsystemref"));
-			return;
-		}
-		IOnlineSessionPtr SessionPtrRef = SubsystemRef->GetSessionInterface();
-		if (SessionPtrRef) 
-		{	
-			if (SessionSearch->SearchResults.Num() > 0) {
-
-				SessionPtrRef->OnJoinSessionCompleteDelegates.AddUObject(this, &UEOS_GameInstance::onJoinSessionCompleted);
-// 				for (FOnlineSessionSearchResult i : SessionSearch->SearchResults) {
-// 					if (i.)
-// 				}
-				SessionPtrRef->JoinSession(0, MySessionName, SessionSearch->SearchResults[0]);
-				UE_LOG(LogTemp, Warning, TEXT("Joined Session %s"), *SessionSearch->SearchResults[0].Session.SessionInfo->ToString());
-			}
-			else {
-				//createEOSSession(false, false, 10);
-				UE_LOG(LogTemp, Error, TEXT("No Sessions found"));
-			}
-		}
+		UMyBrowserWidget* ServerBrowser = UMyUtility::GetBrowserWidget(this);
+		ServerBrowser->populateScrollBox(SessionSearch->SearchResults);
 	}
 	else {
 		//createEOSSession(false, false, 10); //create a session if you couldn't find a session (not sure if I want to keep this)

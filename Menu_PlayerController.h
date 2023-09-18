@@ -13,6 +13,7 @@
  class UUserWidget;
  class UWidgetSwitcher;
  class UMyMainMenuWidgetSwitch;
+ class UMyBrowserWidget;
 
 UCLASS()
 class ALERTBALL_API AMenu_PlayerController : public APlayerController
@@ -31,6 +32,8 @@ public:
 	UFUNCTION()
 	void SwitchMenu(float MenuIndex);
 
+	UFUNCTION()
+	UMyBrowserWidget* GetServerBrowser();
 
 	UPROPERTY()
 	UMyMainMenuWidgetSwitch* MenuSwitchInst;

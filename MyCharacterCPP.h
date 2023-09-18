@@ -6,7 +6,7 @@
 #include "GameFramework/Character.h"
 #include "InputAction.h"
 #include "InputActionValue.h"
-#include "Curves/CurveFloat.h"
+
 #include "MyCharacterCPP.generated.h"
 
 

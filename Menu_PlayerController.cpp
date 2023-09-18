@@ -5,6 +5,8 @@
 //widgets
 #include "Blueprint/UserWidget.h"
 #include "Blueprint/WidgetBlueprintLibrary.h"
+//custom widgets
+#include "MenuWidgets/MyBrowserWidget.h"
 //widget switcher
 #include "Components/WidgetSwitcher.h"
 #include "MenuWidgets/MyMainMenuWidgetSwitch.h"
@@ -41,6 +43,24 @@ void AMenu_PlayerController::SwitchMenu(float MenuIndex)
 		return;
 	}
 	WidgetSwitcherInst->SetActiveWidgetIndex(MenuIndex);
+}
+
+UMyBrowserWidget* AMenu_PlayerController::GetServerBrowser()
+{
+	if (WidgetSwitcherInst == nullptr) {
+		UE_LOG(LogTemp, Warning, TEXT("AMenu_PlayerController::GetServerBrowser: No WidgetSwitcher found"))
+		return nullptr;
+	}
+
+	if (UMyBrowserWidget* BrowserWidget = Cast<UMyBrowserWidget>(WidgetSwitcherInst->GetActiveWidget())) {
+		return BrowserWidget;
+	}
+	UE_LOG(LogTemp, Warning, TEXT("AMenu_PlayerController::GetServerBrowser: Cast to UMyBrowserWidget failed"))
+	return nullptr;
+	
+
+
+	
 }
 
 

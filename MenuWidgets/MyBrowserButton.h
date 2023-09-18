@@ -40,7 +40,7 @@ protected:
 public:
 
 	UFUNCTION(BlueprintCallable)
-	void setupButton(const FName Occupancy, const FName OwningPlayer, const int32 SessionIndex);
+	void setupButton(const FString Occupancy, const FString OwningPlayer, const int32 SessionIndex);
 
 	UFUNCTION()
 	void onButtonPress();

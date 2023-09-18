@@ -49,3 +49,8 @@ UEOS_GameInstance* UMyUtility::GetGameInstance(UObject* Object)
 
 	return EOSGameInstance;
 }
+
+UMyBrowserWidget* UMyUtility::GetBrowserWidget(UObject* Object)
+{
+	return GetMenuPlayerController(Object)->GetServerBrowser();
+}
