@@ -45,7 +45,7 @@ void AMenu_PlayerController::SwitchMenu(float MenuIndex)
 	WidgetSwitcherInst->SetActiveWidgetIndex(MenuIndex);
 }
 
-UMyBrowserWidget* AMenu_PlayerController::GetServerBrowser()
+UMyBrowserWidget* AMenu_PlayerController::GetBrowserWidget()
 {
 	if (WidgetSwitcherInst == nullptr) {
 		UE_LOG(LogTemp, Warning, TEXT("AMenu_PlayerController::GetServerBrowser: No WidgetSwitcher found"))
@@ -57,11 +57,24 @@ UMyBrowserWidget* AMenu_PlayerController::GetServerBrowser()
 	}
 	UE_LOG(LogTemp, Warning, TEXT("AMenu_PlayerController::GetServerBrowser: Cast to UMyBrowserWidget failed"))
 	return nullptr;
-	
 
-
-	
 }
+
+UWidget* AMenu_PlayerController::getCurrentWidget()
+{
+	if (WidgetSwitcherInst == nullptr) {
+		UE_LOG(LogTemp, Warning, TEXT("AMenu_PlayerController::GetServerBrowser: No WidgetSwitcher found"))
+			return nullptr;
+	}
+
+	if (UWidget* BrowserWidget = WidgetSwitcherInst->GetActiveWidget()) {
+		return BrowserWidget;
+	}
+	UE_LOG(LogTemp, Warning, TEXT("AMenu_PlayerController::GetServerBrowser: Cast to UMyBrowserWidget failed"))
+		return nullptr;
+
+}
+
 
 
 

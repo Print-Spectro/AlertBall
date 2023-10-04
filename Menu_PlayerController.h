@@ -33,7 +33,10 @@ public:
 	void SwitchMenu(float MenuIndex);
 
 	UFUNCTION()
-	UMyBrowserWidget* GetServerBrowser();
+	UWidget* getCurrentWidget();
+
+	UFUNCTION()
+	UMyBrowserWidget* GetBrowserWidget();
 
 	UPROPERTY()
 	UMyMainMenuWidgetSwitch* MenuSwitchInst;

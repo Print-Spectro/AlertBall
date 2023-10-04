@@ -102,7 +102,7 @@ void UEOS_GameInstance::createEOSSession(bool bIsDedicatedServer, bool bIsLanSer
 		return;
 	}
 	FOnlineSessionSettings SessionCreationInfo;
-	SessionCreationInfo.bIsDedicated = false;
+	SessionCreationInfo.bIsDedicated = bIsDedicatedServer;
 	SessionCreationInfo.bAllowInvites = true;
 	SessionCreationInfo.bIsLANMatch = false;
 	SessionCreationInfo.NumPublicConnections = NumberOfPublicConnections;
@@ -139,6 +139,7 @@ void UEOS_GameInstance::findSessionAndJoin()
 	IOnlineSessionPtr SessionPtrRef = SubsystemRef->GetSessionInterface();
 	if (SessionPtrRef) 
 	{
+		SessionSearch = nullptr;
 		SessionSearch = MakeShareable(new FOnlineSessionSearch());
 		SessionSearch->QuerySettings.Set(SEARCH_KEYWORDS, FString("AlertBallLobby"), EOnlineComparisonOp::Equals);
 		//SessionSearch->QuerySettings.Set(SEARCH_LOBBIES, true, EOnlineComparisonOp::Equals);
@@ -172,7 +173,7 @@ void UEOS_GameInstance::joinSession(int32 Index)
 		}
 		else {
 			//createEOSSession(false, false, 10);
-			UE_LOG(LogTemp, Error, TEXT("No Sessions found"));
+			UE_LOG(LogTemp, Error, TEXT("UEOS_GameInstance::joinSession: No Sessions found"));
 		}
 	}
 }
@@ -210,6 +211,7 @@ void UEOS_GameInstance::onJoinSessionCompleted(FName SessionName, EOnJoinSession
 				if (!JoinAddress.IsEmpty()) {
 					UE_LOG(LogTemp, Warning, TEXT("ClientTravel"));
 					PlayerControllerRef->ClientTravel(JoinAddress, ETravelType::TRAVEL_Absolute);
+
 				}
 				else {
 					UE_LOG(LogTemp, Error, TEXT("No Join Address"));
@@ -223,12 +225,12 @@ void UEOS_GameInstance::destroySession()
 {
 	IOnlineSubsystem* SubsystemRef = Online::GetSubsystem(this->GetWorld());
 	if (SubsystemRef == nullptr) {
-		UE_LOG(LogTemp, Error, TEXT("Null found at subsystemref"));
+		UE_LOG(LogTemp, Error, TEXT("UEOS_GameInstance::destroySession: Null found at subsystemref"));
 		return;
 	}
 	IOnlineSessionPtr SessionPtrRef = SubsystemRef->GetSessionInterface();
 	if (SessionPtrRef == nullptr) {
-		UE_LOG(LogTemp, Error, TEXT("Null found at sessionptref"));
+		UE_LOG(LogTemp, Error, TEXT("UEOS_GameInstance::destroySession: Null found at sessionptref"));
 		return;
 	}
 	SessionPtrRef->OnDestroySessionCompleteDelegates.AddUObject(this, &UEOS_GameInstance::onDestroySessionCompleted);
@@ -236,9 +238,14 @@ void UEOS_GameInstance::destroySession()
 
 }
 
+void UEOS_GameInstance::setLevelReference(FString& Reference)
+{
+	OpenLevelText = Reference;
+}
+
 void UEOS_GameInstance::onDestroySessionCompleted(FName SessionName, bool bWasSuccesful)
 {
 	if (bWasSuccesful) {
-		UE_LOG(LogTemp, Verbose, TEXT("SessionDestroyed"));
+		UE_LOG(LogTemp, Verbose, TEXT("UEOS_GameInstance::onDestroySessionCompleted: SessionDestroyed"));
 	}
 }

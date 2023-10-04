@@ -18,4 +18,6 @@ class ALERTBALL_API AEOS_PlayerController : public APlayerController
 protected:
 	virtual void OnNetCleanup(UNetConnection* Connection) override;
 
+	virtual void BeginPlay() override;
+
 };

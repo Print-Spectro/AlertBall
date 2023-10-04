@@ -6,6 +6,9 @@
 #include "EOS_GameInstance.h"
 #include "EOS_GameMode.h"
 
+
+
+
 void AEOS_PlayerController::OnNetCleanup(UNetConnection* Connection)
 {
 	
@@ -14,4 +17,9 @@ void AEOS_PlayerController::OnNetCleanup(UNetConnection* Connection)
 		GameInstanceRef->destroySession();
 	}
 	Super::OnNetCleanup(Connection);
+}
+
+void AEOS_PlayerController::BeginPlay()
+{
+
 }

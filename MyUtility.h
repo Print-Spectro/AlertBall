@@ -12,6 +12,9 @@
  class AMenu_PlayerController;
  class UEOS_GameInstance;
  class UMyBrowserWidget;
+ class UMySessionConfigurator;
+ class UWidget;
+ class AMyCharacterCPP;
 
 UCLASS()
 class ALERTBALL_API UMyUtility : public UObject
@@ -24,4 +27,6 @@ public:
 	static AMenu_PlayerController* GetMenuPlayerController(UObject* Object);
 	static UEOS_GameInstance* GetGameInstance(UObject* Object);
 	static UMyBrowserWidget* GetBrowserWidget(UObject* Object);
+	static UWidget* GetCurrentWidget(UObject* Object);
+	static AMyCharacterCPP* GetMenuPawn(UObject* Object);
 };

@@ -3,7 +3,9 @@
 
 #include "MyUtility.h"
 #include "EOS_GameInstance.h"
+#include "MyCharacterCPP.h"
 #include "Menu_PlayerController.h"
+#include "Kismet/GameplayStatics.h"
 
 APlayerController* UMyUtility::GetFirstPlayerController(UObject* Object)
 {
@@ -52,5 +54,28 @@ UEOS_GameInstance* UMyUtility::GetGameInstance(UObject* Object)
 
 UMyBrowserWidget* UMyUtility::GetBrowserWidget(UObject* Object)
 {
-	return GetMenuPlayerController(Object)->GetServerBrowser();
+	return GetMenuPlayerController(Object)->GetBrowserWidget();
 }
+
+UWidget* UMyUtility::GetCurrentWidget(UObject* Object)
+{
+	return GetMenuPlayerController(Object)->getCurrentWidget();
+}
+
+AMyCharacterCPP* UMyUtility::GetMenuPawn(UObject* Object)
+{
+	UWorld* World = Object->GetWorld();
+	if (World == nullptr) {
+		UE_LOG(LogTemp, Error, TEXT("UMyUtility::GetMenuPawn: No world found"));
+		return nullptr;
+	}
+	AMyCharacterCPP* MyCharacter = Cast<AMyCharacterCPP>(UGameplayStatics::GetActorOfClass(World, AMyCharacterCPP::StaticClass()));
+	if (MyCharacter == nullptr) {
+		UE_LOG(LogTemp, Error, TEXT("UMyUtility::GetMenuPawn: Cast to Altert failed"));
+		return nullptr;
+	}
+	
+	return MyCharacter;
+}
+
+

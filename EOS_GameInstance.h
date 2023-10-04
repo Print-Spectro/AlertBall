@@ -43,6 +43,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category="EOS Functions")
 	void destroySession();
 
+	UFUNCTION()
+	void setLevelReference(FString& Reference);
+
 	TSharedPtr<FOnlineSessionSearch> SessionSearch;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "EOS Variables")

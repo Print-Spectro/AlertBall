@@ -48,9 +48,9 @@ void UMyBrowserWidget::createSessionEntry(FOnlineSessionSearchResult SessionResu
 	UMyBrowserButton* BrowserButton = CreateWidget<UMyBrowserButton>(GetWorld(), BrowserButtonAsset);
 
 	//calculating occupancy
-	int32 OpenConnections = SessionResult.Session.NumOpenPublicConnections;
+	int32 OpenConnections = SessionResult.Session.NumOpenPrivateConnections;
 	int32 TotalConnections = SessionResult.Session.SessionSettings.NumPublicConnections;
-	FString Occupancy = FString::Printf(TEXT("%f/%f"), TotalConnections-OpenConnections, TotalConnections);
+	FString Occupancy = FString::Printf(TEXT("%i/%i"), TotalConnections-OpenConnections, TotalConnections);
 
 	//get username
 	FString Username = SessionResult.Session.OwningUserName;
@@ -61,6 +61,7 @@ void UMyBrowserWidget::createSessionEntry(FOnlineSessionSearchResult SessionResu
 
 void UMyBrowserWidget::populateScrollBox(TArray<FOnlineSessionSearchResult> SessionResults)
 {
+	ScrollBox->ClearChildren();
 	int32 i = 0;
 	for (FOnlineSessionSearchResult SessionResult : SessionResults) {
 		createSessionEntry(SessionResult, i);
