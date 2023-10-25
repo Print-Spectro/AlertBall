@@ -1,5 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
+// Character control binding in cpp
 
 #include "MyCharacterCPP.h"
 #include "UObject/ConstructorHelpers.h"

@@ -1,5 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
+// Button added to browser list to select the session
 
 #include "MyBrowserButton.h"
 

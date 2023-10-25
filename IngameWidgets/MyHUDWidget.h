@@ -13,5 +13,4 @@ UCLASS()
 class ALERTBALL_API UMyHUDWidget : public UUserWidget
 {
 	GENERATED_BODY()
-	
 };

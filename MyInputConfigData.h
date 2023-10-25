@@ -25,5 +25,5 @@ public:
 	UInputAction* InputKickRight;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	UInputAction* InputKickLeft;
+    UInputAction *InputKickLeft;
 };

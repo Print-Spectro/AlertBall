@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+//Player controller used for the main menu
 
 #pragma once
 
