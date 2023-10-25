@@ -1,5 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
+//Main Menu WIdget
 
 #include "MyMainMenu.h"
 //components
@@ -15,18 +14,24 @@ void UMyMainMenu::NativeConstruct()
     Super::NativeConstruct();
 
     // Bind delegates here.
-
-    BTN_JoinGame->OnClicked.AddDynamic(this, &UMyMainMenu::OnBTN_JoinGamePressed);
-    BTN_CreateGame->OnClicked.AddDynamic(this, &UMyMainMenu::OnBTN_CreateGamePressed);
-    BTN_Cosmetics->OnClicked.AddDynamic(this, &UMyMainMenu::OnBTN_CosmeticsPressed);
-    BTN_Settings->OnClicked.AddDynamic(this, &UMyMainMenu::OnBTN_SettingsPressed);
+    if (BTN_JoinGame) {
+      BTN_JoinGame->OnClicked.AddDynamic(this,&UMyMainMenu::OnBTN_JoinGamePressed);
+    }
+    if (BTN_CreateGame) {
+      BTN_CreateGame->OnClicked.AddDynamic(this, &UMyMainMenu::OnBTN_CreateGamePressed);
+    }
+    if (BTN_Cosmetics) {
+      BTN_Cosmetics->OnClicked.AddDynamic(this,&UMyMainMenu::OnBTN_CosmeticsPressed);
+    }
+    if (BTN_Settings) {
+      BTN_Settings->OnClicked.AddDynamic(this,&UMyMainMenu::OnBTN_SettingsPressed);
+    }
 }
 
 void UMyMainMenu::OnBTN_JoinGamePressed()
 {
     UMyUtility::GetMenuPlayerController(this)->SwitchMenu(JoinSessionIndex);
 }
-
 
 void UMyMainMenu::OnBTN_CreateGamePressed()
 {

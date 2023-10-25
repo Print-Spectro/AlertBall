@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+//Widget for configuring and creating multiplayer sessions
 
 
 #include "MySessionConfigurator.h"
@@ -11,7 +11,6 @@
 
 //Widget binding
 #include "Components/Button.h"
-
 
 void UMySessionConfigurator::NativeConstruct()
 {
@@ -64,7 +63,3 @@ void UMySessionConfigurator::onCreatePressed()
 {
 	UMyUtility::GetGameInstance(this)->createEOSSession(false, false, NumberofConnections);
 }
-
-
-
-

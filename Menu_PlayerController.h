@@ -22,10 +22,8 @@ class ALERTBALL_API AMenu_PlayerController : public APlayerController
 	
 	virtual void BeginPlay() override;
 
-
 	UPROPERTY(EditDefaultsOnly, category = "Menu Widget")
 	TSubclassOf<UUserWidget> MainMenuAsset;
-
 
 public:
 
@@ -43,6 +41,4 @@ public:
 
 	UPROPERTY()
 	UWidgetSwitcher* WidgetSwitcherInst;
-	
-
 };

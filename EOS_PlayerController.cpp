@@ -11,7 +11,6 @@
 
 void AEOS_PlayerController::OnNetCleanup(UNetConnection* Connection)
 {
-	
 	UEOS_GameInstance* GameInstanceRef = Cast<UEOS_GameInstance>(GetWorld()->GetGameInstance());
 	if (GameInstanceRef) {
 		GameInstanceRef->destroySession();

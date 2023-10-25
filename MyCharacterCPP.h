@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+//Character control binding in cpp
 
 #pragma once
 
@@ -61,9 +61,6 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Enhanced Input")
 	class UMyInputConfigData* InputActions;
 
-// 	UPROPERTY(EditDefaultsOnly)
-// 	class UCharacterMovementComponent* CharacterMovement;
-
 	//Handle move input
 	void Move(const FInputActionValue& Value);
 
@@ -72,10 +69,6 @@ protected:
 
 	//Stop moving when move input released
 	void stopMove(const FInputActionValue& Value);
-
-	
-	//Handle Jump input 
-	//void Jump(const FInputActionValue& Value);
 	
 	UPROPERTY(EditDefaultsOnly)
 	float MoveSpeed = 100;

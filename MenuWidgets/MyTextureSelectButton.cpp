@@ -1,5 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
+//Button created based on data from the FTextureData struct
 
 #include "MyTextureSelectButton.h"
 
@@ -26,21 +25,18 @@ void UMyTextureSelectButton::OnButtonPressed()
 		UE_LOG(LogTemp, Warning, TEXT("UMyTextureSelectButton::OnButtonPressed: Cast to UMyCosmeticsWidget failed"));
 		return;
 	}
-
 	AMyCharacterCPP* MenuPawn = UMyUtility::GetMenuPawn(this);
 	if (MenuPawn == nullptr) {
 		UE_LOG(LogTemp, Warning, TEXT("UMyTextureSelectButton::OnButtonPressed: MenuPawn is null"));
 		return;
 	}
 	MenuPawn->GetMesh()->SetMaterial(0, ButtonData.Texture);
-
 }
 
 void UMyTextureSelectButton::setupButton(const FTextureData Data)
 {
 	ButtonData = Data;
 	TXT_Name->SetText(FText::FromString(Data.TextureName));
-	
 }
 
 

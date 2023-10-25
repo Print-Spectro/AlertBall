@@ -54,5 +54,4 @@ protected:
 
 	UFUNCTION()
 	void onRefreshPress();
-
 };

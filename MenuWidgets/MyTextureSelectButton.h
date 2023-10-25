@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+//Button created based on data from the FTextureData struct
 
 #pragma once
 #include "MyCosmeticsWidget.h"

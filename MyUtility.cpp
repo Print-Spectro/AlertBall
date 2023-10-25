@@ -1,5 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
+//This utility class is used for repeat casting to ingame objects with error checking to prevent crashes.
 
 #include "MyUtility.h"
 #include "EOS_GameInstance.h"
@@ -22,7 +21,6 @@ APlayerController* UMyUtility::GetFirstPlayerController(UObject* Object)
 }
 
 AMenu_PlayerController* UMyUtility::GetMenuPlayerController(UObject* Object) {
-
 	AMenu_PlayerController* PlayerController = Cast<AMenu_PlayerController>(GetFirstPlayerController(Object));
 	if (PlayerController == nullptr) {
 		UE_LOG(LogTemp, Error, TEXT("UMyUtility::GetMenuPlayerController: No player controller found"));
@@ -48,7 +46,6 @@ UEOS_GameInstance* UMyUtility::GetGameInstance(UObject* Object)
 		UE_LOG(LogTemp, Error, TEXT("UMyUtility::GetGameInstance: Cast to EOS_GameInstance fail"));
 		return nullptr;
 	}
-
 	return EOSGameInstance;
 }
 
@@ -74,7 +71,6 @@ AMyCharacterCPP* UMyUtility::GetMenuPawn(UObject* Object)
 		UE_LOG(LogTemp, Error, TEXT("UMyUtility::GetMenuPawn: Cast to Altert failed"));
 		return nullptr;
 	}
-	
 	return MyCharacter;
 }
 

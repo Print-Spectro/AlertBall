@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+//Main Menu WIdget
 
 #pragma once
 
@@ -10,7 +10,7 @@
  * 
  */
 
- class UButton;
+class UButton;
 UCLASS()
 class ALERTBALL_API UMyMainMenu : public UUserWidget
 {
@@ -32,7 +32,7 @@ class ALERTBALL_API UMyMainMenu : public UUserWidget
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 	UButton* BTN_CreateGame;
 
-
+	//widet switcher indexes for child widgets
 	UPROPERTY(EditDefaultsOnly, Category = "ButtonAssignment", meta = (ToolTip = "Assign the index to switch to in the widget switcher"))
 	float JoinSessionIndex = 1;
 

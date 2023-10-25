@@ -19,14 +19,12 @@ class ALERTBALL_API UMyBrowserButton : public UUserWidget
 {
 	GENERATED_BODY()
 
-
 	virtual void NativeConstruct() override;
 	
 protected:
 
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 	UTextBlock* TXT_OwningPlayer;
-
 
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 	UTextBlock* TXT_Occupancy;
@@ -45,5 +43,4 @@ public:
 	UFUNCTION()
 	void onButtonPress();
 	
-
 };

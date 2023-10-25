@@ -1,5 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
+//Game instance handles session creation and joining
 
 #include "EOS_GameInstance.h"
 #include "OnlineSubsystemUtils.h"
@@ -17,12 +16,11 @@
 void UEOS_GameInstance::StartGameInstance()
 {
 	Super::StartGameInstance();
-
 }
 
 void UEOS_GameInstance::loginWithEOS(FString ID, FString Token, FString LoginType) {
 	//Setting up online subsystem
-	IOnlineSubsystem *SubsystemRef = Online::GetSubsystem(this->GetWorld());
+	IOnlineSubsystem* SubsystemRef = Online::GetSubsystem(this->GetWorld());
 	if (SubsystemRef == nullptr) {
 		UE_LOG(LogTemp, Error, TEXT("Null found at subsystemref"));
 		return;
@@ -35,38 +33,40 @@ void UEOS_GameInstance::loginWithEOS(FString ID, FString Token, FString LoginTyp
 		AccountDetails.Type = LoginType;
 		IdentityPointerRef->OnLoginCompleteDelegates->AddUObject(this, &UEOS_GameInstance::LoginWIthEOS_Return);
 		IdentityPointerRef->Login(0, AccountDetails);
-
 	}
 }
-
 
 void UEOS_GameInstance::LoginWIthEOS_Return(int32 LocalUserNum, bool bWasSuccess, const FUniqueNetId& UserId, const FString& Error)
 {
-	if (bWasSuccess) {
+	if (bWasSuccess) 
+	{
 		UE_LOG(LogTemp, Warning, TEXT("Login Success"));
 	}
-	if (!bWasSuccess) {
+	if (!bWasSuccess) 
+	{
 		UE_LOG(LogTemp, Error, TEXT("Login Fail Reason - %S"), *Error);
 	}
 }
-
 
 FString UEOS_GameInstance::getPlayerUsername()
 //Returns player username 
 {
 	IOnlineSubsystem* SubsystemRef = Online::GetSubsystem(this->GetWorld());
-	if (SubsystemRef == nullptr) {
+	if (SubsystemRef == nullptr) 
+	{
 		UE_LOG(LogTemp, Error, TEXT("Null found at subsystemref"));
 		return FString();
 	}
 	IOnlineIdentityPtr IdentityPointerRef = SubsystemRef->GetIdentityInterface();
-	if (IdentityPointerRef == nullptr) {
+	if (IdentityPointerRef == nullptr) 
+	{
 		UE_LOG(LogTemp, Error, TEXT("Null found at IdentityPointer"));
 		return FString();
 	}
-	if (IdentityPointerRef->GetLoginStatus(0) == ELoginStatus::LoggedIn) {
+	if (IdentityPointerRef->GetLoginStatus(0) == ELoginStatus::LoggedIn) 
+	{
 		return IdentityPointerRef->GetPlayerNickname(0);
-	 }
+	}
 	return FString();
 	
 }
@@ -74,16 +74,17 @@ FString UEOS_GameInstance::getPlayerUsername()
 bool UEOS_GameInstance::isPlayerLoggedIn()
 {
 	IOnlineSubsystem* SubsystemRef = Online::GetSubsystem(this->GetWorld());
-	if (SubsystemRef == nullptr) {
-
+	if (SubsystemRef == nullptr) 
+	{
 		return 0;
 	}
 	IOnlineIdentityPtr IdentityPointerRef = SubsystemRef->GetIdentityInterface();
-	if (IdentityPointerRef == nullptr) {
-		
+	if (IdentityPointerRef == nullptr) 
+	{
 		return 0;
 	}
-	if (IdentityPointerRef->GetLoginStatus(0) == ELoginStatus::LoggedIn) {
+	if (IdentityPointerRef->GetLoginStatus(0) == ELoginStatus::LoggedIn) 
+	{
 		return 1;
 	}
 	return 0;
@@ -92,12 +93,14 @@ bool UEOS_GameInstance::isPlayerLoggedIn()
 void UEOS_GameInstance::createEOSSession(bool bIsDedicatedServer, bool bIsLanServer, int32 NumberOfPublicConnections)
 {
 	IOnlineSubsystem* SubsystemRef = Online::GetSubsystem(this->GetWorld());
-	if (SubsystemRef == nullptr) {
+	if (SubsystemRef == nullptr) 
+	{
 		UE_LOG(LogTemp, Error, TEXT("Null found at subsystemref"));
 		return;
 	}
 	IOnlineSessionPtr SessionPtrRef = SubsystemRef->GetSessionInterface();
-	if (SessionPtrRef == nullptr) {
+	if (SessionPtrRef == nullptr) 
+	{
 		UE_LOG(LogTemp, Error, TEXT("Null found at subsystemref"));
 		return;
 	}
@@ -111,7 +114,6 @@ void UEOS_GameInstance::createEOSSession(bool bIsDedicatedServer, bool bIsLanSer
 	SessionCreationInfo.bShouldAdvertise = true;
 	SessionCreationInfo.bAllowJoinInProgress = true;
 	SessionCreationInfo.bAllowJoinViaPresence = true;
-
 	SessionCreationInfo.Set(SEARCH_KEYWORDS, FString("AlertBallLobby"), EOnlineDataAdvertisementType::ViaOnlineService);
 	SessionPtrRef->OnCreateSessionCompleteDelegates.AddUObject(this, &UEOS_GameInstance::onCreateSessionCompleted);
 	SessionPtrRef->CreateSession(0, MySessionName, SessionCreationInfo);
@@ -119,20 +121,20 @@ void UEOS_GameInstance::createEOSSession(bool bIsDedicatedServer, bool bIsLanSer
 
 void UEOS_GameInstance::onCreateSessionCompleted(FName SessionName, bool bWasSuccesful)
 {
-	if (!bWasSuccesful) {
+	if (!bWasSuccesful) 
+	{
 		UE_LOG(LogTemp, Error, TEXT("UnableToCreateSession"));
 		return;
 	}
 	UE_LOG(LogTemp, Warning, TEXT("SessionCreated"));
 	GetWorld()->ServerTravel(OpenLevelText);
-	//UGameplayStatics::OpenLevelBySoftObjectPtr(GetWorld(), LevelToOpen);
 }
-
 
 void UEOS_GameInstance::findSessionAndJoin()
 {
 	IOnlineSubsystem *SubsystemRef = Online::GetSubsystem(this->GetWorld());
-	if (SubsystemRef == nullptr) {
+	if (SubsystemRef == nullptr) 
+	{
 		UE_LOG(LogTemp, Error, TEXT("Null found at subsystemref"));
 		return;
 	}
@@ -149,29 +151,29 @@ void UEOS_GameInstance::findSessionAndJoin()
 		SessionPtrRef->OnFindSessionsCompleteDelegates.AddUObject(this, &UEOS_GameInstance::onFindSessionCompleted);
 		SessionPtrRef->FindSessions(0, SessionSearch.ToSharedRef());
 	}
-
 }
 
 void UEOS_GameInstance::joinSession(int32 Index)
 {
 	IOnlineSubsystem* SubsystemRef = Online::GetSubsystem(this->GetWorld());
-	if (SubsystemRef == nullptr) {
+	if (SubsystemRef == nullptr) 
+	{
 		UE_LOG(LogTemp, Error, TEXT("Null found at subsystemref"));
 		return;
 	}
 	IOnlineSessionPtr SessionPtrRef = SubsystemRef->GetSessionInterface();
 	if (SessionPtrRef)
 	{
-		if (SessionSearch->SearchResults.Num() > 0) {
+		if (SessionSearch->SearchResults.Num() > 0) 
+		{
 
 			SessionPtrRef->OnJoinSessionCompleteDelegates.AddUObject(this, &UEOS_GameInstance::onJoinSessionCompleted);
-			// 				for (FOnlineSessionSearchResult i : SessionSearch->SearchResults) {
-			// 					if (i.)
-			// 				}
+
 			SessionPtrRef->JoinSession(0, MySessionName, SessionSearch->SearchResults[Index]);
 			UE_LOG(LogTemp, Warning, TEXT("Joined Session %s"), *SessionSearch->SearchResults[Index].Session.SessionInfo->ToString());
 		}
-		else {
+		else 
+		{
 			//createEOSSession(false, false, 10);
 			UE_LOG(LogTemp, Error, TEXT("UEOS_GameInstance::joinSession: No Sessions found"));
 		}
@@ -180,16 +182,17 @@ void UEOS_GameInstance::joinSession(int32 Index)
 
 void UEOS_GameInstance::onFindSessionCompleted(bool bWasSuccess)
 {
-	if (bWasSuccess) {
+	if (bWasSuccess) 
+	{
 		UMyBrowserWidget* ServerBrowser = UMyUtility::GetBrowserWidget(this);
 		ServerBrowser->populateScrollBox(SessionSearch->SearchResults);
 	}
-	else {
+	else 
+	{
 		//createEOSSession(false, false, 10); //create a session if you couldn't find a session (not sure if I want to keep this)
 		UE_LOG(LogTemp, Error, TEXT("Find session unsuccessful"));
 	}
 }
-
 
 void UEOS_GameInstance::onJoinSessionCompleted(FName SessionName, EOnJoinSessionCompleteResult::Type Result)
 {
@@ -208,10 +211,10 @@ void UEOS_GameInstance::onJoinSessionCompleted(FName SessionName, EOnJoinSession
 			{
 				SessionPtrRef->GetResolvedConnectString(MySessionName, JoinAddress);
 				UE_LOG(LogTemp, Warning, TEXT("JoinAddress is %s"), *JoinAddress);
-				if (!JoinAddress.IsEmpty()) {
+				if (!JoinAddress.IsEmpty()) 
+				{
 					UE_LOG(LogTemp, Warning, TEXT("ClientTravel"));
 					PlayerControllerRef->ClientTravel(JoinAddress, ETravelType::TRAVEL_Absolute);
-
 				}
 				else {
 					UE_LOG(LogTemp, Error, TEXT("No Join Address"));
@@ -224,18 +227,19 @@ void UEOS_GameInstance::onJoinSessionCompleted(FName SessionName, EOnJoinSession
 void UEOS_GameInstance::destroySession()
 {
 	IOnlineSubsystem* SubsystemRef = Online::GetSubsystem(this->GetWorld());
-	if (SubsystemRef == nullptr) {
+	if (SubsystemRef == nullptr) 
+	{
 		UE_LOG(LogTemp, Error, TEXT("UEOS_GameInstance::destroySession: Null found at subsystemref"));
 		return;
 	}
 	IOnlineSessionPtr SessionPtrRef = SubsystemRef->GetSessionInterface();
-	if (SessionPtrRef == nullptr) {
+	if (SessionPtrRef == nullptr) 
+	{
 		UE_LOG(LogTemp, Error, TEXT("UEOS_GameInstance::destroySession: Null found at sessionptref"));
 		return;
 	}
 	SessionPtrRef->OnDestroySessionCompleteDelegates.AddUObject(this, &UEOS_GameInstance::onDestroySessionCompleted);
 	SessionPtrRef->DestroySession(MySessionName);
-
 }
 
 void UEOS_GameInstance::setLevelReference(FString& Reference)
@@ -245,7 +249,8 @@ void UEOS_GameInstance::setLevelReference(FString& Reference)
 
 void UEOS_GameInstance::onDestroySessionCompleted(FName SessionName, bool bWasSuccesful)
 {
-	if (bWasSuccesful) {
+	if (bWasSuccesful) 
+	{
 		UE_LOG(LogTemp, Verbose, TEXT("UEOS_GameInstance::onDestroySessionCompleted: SessionDestroyed"));
 	}
 }

@@ -37,8 +37,6 @@ void UMyBrowserButton::setupButton(const FString Occupancy, const FString Owning
 	else {
 		UE_LOG(LogTemp, Warning, TEXT("UMyBrowserButton::setupButton: Null at TXT_Occupancy"))
 	}
-
-
 	SessionToJoin = SessionIndex;
 }
 
@@ -48,7 +46,7 @@ void UMyBrowserButton::onButtonPress()
 	UMyBrowserWidget* Browser = Cast<UMyBrowserWidget>(UMyUtility::GetBrowserWidget(this));
 	if (Browser == nullptr) {
 		UE_LOG(LogTemp, Warning, TEXT("UMyBrowserButton::onButtonPress: Cast to BrowserWidgetFailed"))
-		return;
+			return;
 	}
 	Browser->setSessionToJoin(SessionToJoin);
 }

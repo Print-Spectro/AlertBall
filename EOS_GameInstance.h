@@ -13,7 +13,6 @@
  * 
  */
  
-
 UCLASS()
 class ALERTBALL_API UEOS_GameInstance : public UGameInstance
 {

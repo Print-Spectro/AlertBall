@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+//Settings yet to be populated
 
 
 #include "MySettingsWidget.h"

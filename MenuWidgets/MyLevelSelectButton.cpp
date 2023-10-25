@@ -1,5 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
+//Button created from data table that determines the level and the thumbnail
 
 #include "MyLevelSelectButton.h"
 

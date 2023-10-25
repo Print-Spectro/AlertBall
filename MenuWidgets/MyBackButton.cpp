@@ -13,12 +13,20 @@
 
 void UMyBackButton::NativeConstruct()
 {
-	BTN_Back->OnClicked.AddUniqueDynamic(this, &UMyBackButton::OnButtonPressed);
+	if (BTN_Back) 
+	{
+		BTN_Back->OnClicked.AddUniqueDynamic(this, &UMyBackButton::OnButtonPressed);
+	}
+	else 
+	{
+		UE_LOG(LogTemp, Warning, TEXT("UMyBackButton::NativeConstruct: No back button, likely using a cpp class instead of a blueprint"));
+	}
+
 }
 
+//Switches to main menu
 void UMyBackButton::OnButtonPressed()
 {
 	AMenu_PlayerController* PlayerController = UMyUtility::GetMenuPlayerController(this);
-
 	PlayerController->SwitchMenu(0);
 }

@@ -18,8 +18,6 @@ void UMyCosmeticsWidget::NativeConstruct()
 	addTextureButtons();
 }
 
-
-
 void UMyCosmeticsWidget::onSkinsClicked()
 {
 	WS_Cosmetics->SetActiveWidgetIndex(0);

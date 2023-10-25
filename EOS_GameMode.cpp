@@ -33,13 +33,10 @@ void AEOS_GameMode::PostLogin(APlayerController* NewPlayer)
 			check(IsValid(RemoteNetConnectionRef));
 			UniqueNetIDRepl = RemoteNetConnectionRef->PlayerId;
 		}
-
 		TSharedPtr<const FUniqueNetId> UniqueNetId = UniqueNetIDRepl.GetUniqueNetId();
-
 		if (UniqueNetId == nullptr) {
 			return;
 		}
-
 		IOnlineSubsystem *SubsystemRef = Online::GetSubsystem(NewPlayer->GetWorld());
 		IOnlineSessionPtr SessionRef = SubsystemRef->GetSessionInterface();
 		bool bRegistrationSuccess = SessionRef->RegisterPlayer(FName("MainSession"), *UniqueNetId, false);
@@ -47,6 +44,5 @@ void AEOS_GameMode::PostLogin(APlayerController* NewPlayer)
 			UE_LOG(LogTemp, Warning, TEXT("Registration Successful"));
 		}
 	}
-
 }
 

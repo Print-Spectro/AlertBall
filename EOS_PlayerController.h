@@ -14,7 +14,6 @@ class ALERTBALL_API AEOS_PlayerController : public APlayerController
 {
 	GENERATED_BODY()
 	
-
 protected:
 	virtual void OnNetCleanup(UNetConnection* Connection) override;
 
